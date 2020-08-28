@@ -1,28 +1,18 @@
-array = open('ventas_base.db').read.chomp.split(',')
-def proyecciones(arr)
-    result = arr.map{ |x| x.to_f}
-    
+array = open('ventas_base.db').read.chomp.split(',').map(&:to_f)
 
-    sum1 = result.inject do |sum, x| 
-        break sum if x ==result[6] 
-        sum + x 
-    end
-    sum2 = result.inject do|sum, x| 
-        sum + x
-    end
-    sum2 = (sum2 - sum1)*1.2
-    sum2= sum2.truncate(2)
-    sum1 = sum1*1.1 
-    sum1 = sum1.truncate(2)
-    
-    
-    
-    return "#{sum1}\n#{sum2}\n"
+
+def proyecciones(arr, aumento, desde, hasta)
+    result = arr[desde..hasta] 
+    sum = result.map{|x| x*aumento}.sum
 end
-data = proyecciones(array)
+    
+
+output = File.open("resultados.data", "w")
+output.write(proyecciones(array, 1.1, 0, 5))
+output.write("\n")
+output.write(proyecciones(array, 1.2, 0, 11))
 
 
-File.write('resultados.data', data)
 
 
 
